@@ -122,15 +122,75 @@ exports.renameChat = asyncHandler(async function (req, res) {
     });
   }
 
-  const updatedChat = await Chat.findByIdAndUpdate(chatId, chatName, {
-    new: true,
-  })
+  const updatedChat = await Chat.findByIdAndUpdate(
+    chatId,
+    { chatName },
+    {
+      new: true,
+    }
+  )
     .populate("users", "-password")
     .populate("groupAdmin", "-password");
 
   if (updatedChat) {
     res.status(200).json({
       chat: updatedChat,
+    });
+  } else {
+    res.status(404).json({ message: "Chat not found" });
+  }
+});
+
+exports.addInGroup = asyncHandler(async function (req, res) {
+  const { chatId, userId } = req.body;
+
+  if (!chatId || !userId) {
+    return res.status(400).json({
+      message: "Error happened while adding user into group",
+    });
+  }
+
+  const groupChat = await Chat.findByIdAndUpdate(
+    chatId,
+    {
+      $push: { users: userId },
+    },
+    { new: true }
+  )
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
+
+  if (groupChat) {
+    res.status(200).json({
+      chat: groupChat,
+    });
+  } else {
+    res.status(404).json({ message: "Chat not found" });
+  }
+});
+
+exports.removeFromGroupChat = asyncHandler(async function (req, res) {
+  const { chatId, userId } = req.body;
+
+  if (!chatId || !userId) {
+    return res.status(400).json({
+      message: "Error happened while adding user into group",
+    });
+  }
+
+  const groupChat = await Chat.findByIdAndUpdate(
+    chatId,
+    {
+      $pull: { users: userId },
+    },
+    { new: true }
+  )
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
+
+  if (groupChat) {
+    res.status(200).json({
+      chat: groupChat,
     });
   } else {
     res.status(404).json({ message: "Chat not found" });
