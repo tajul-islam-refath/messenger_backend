@@ -9,7 +9,14 @@ exports.registerUser = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Please enter all the feilds" });
   }
 
-  const user = await new User({ name, email, password, avatar: image });
+  const user = await new User({
+    name,
+    email,
+    password,
+    avatar: image
+      ? image
+      : "https://wilkinsonschool.org/wp-content/uploads/2018/10/user-default-grey.png",
+  });
   await user.save();
 
   if (user) {
@@ -19,8 +26,8 @@ exports.registerUser = asyncHandler(async (req, res) => {
         name: user.name,
         email: user.email,
         avatar: user.avatar,
+        token: await user.getToken(),
       },
-      token: await user.getToken(),
     });
   } else {
     res.status(400).json({ message: "Faild to create a new user" });
@@ -46,8 +53,8 @@ exports.loginUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       avatar: user.avatar,
+      token: await user.getToken(),
     },
-    token: await user.getToken(),
   });
 });
 
@@ -61,8 +68,9 @@ exports.allUsers = asyncHandler(async (req, res) => {
       }
     : {};
 
-  const users = await User.find(keyword);
-  // .find({ _id: { $ne: req.user._id } })
+  const users = await User.find(keyword)
+    .find({ _id: { $ne: req.user._id } })
+    .select("-password");
 
   res.status(200).json({
     users,

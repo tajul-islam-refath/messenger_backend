@@ -5,12 +5,14 @@ const asyncHandler = require("express-async-handler");
 exports.accessChat = asyncHandler(async (req, res) => {
   const { userId } = req.body;
 
+  console.log(userId);
+
   if (!userId) {
     console.log("User not found");
     return res.status(401).json({ message: "User not found" });
   }
 
-  var isChat = await new Chat.find({
+  var isChat = await Chat.find({
     isGroupChat: false,
     $and: [
       { users: { $elemMatch: { $eq: req.user._id } } },
@@ -31,7 +33,7 @@ exports.accessChat = asyncHandler(async (req, res) => {
     });
   } else {
     try {
-      const newChat = await Chat({
+      const newChat = await new Chat({
         chatName: "sender",
         isGroupChat: false,
         users: [req.user._id, userId],
@@ -39,10 +41,12 @@ exports.accessChat = asyncHandler(async (req, res) => {
 
       await newChat.save();
 
-      const fullChat = await Chat.find({ _is: newChat._id }).populate(
+      const fullChat = await Chat.find({ _id: newChat._id }).populate(
         "users",
         "-password"
       );
+
+      // console.log(fullChat);
 
       res.status(200).send(fullChat);
     } catch (e) {
@@ -54,7 +58,7 @@ exports.accessChat = asyncHandler(async (req, res) => {
 
 exports.getAllChats = asyncHandler(async function (req, res) {
   try {
-    const chats = await Chat.find({
+    let chats = await Chat.find({
       users: { $elemMatch: { $eq: req.user._id } },
     })
       .populate("user", "-password")

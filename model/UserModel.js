@@ -22,8 +22,6 @@ const userSchema = mongoose.Schema(
     },
     avatar: {
       type: String,
-      default:
-        "https://cdn.vectorstock.com/i/1000x1000/19/45/user-avatar-icon-sign-symbol-vector-4001945.webp",
     },
     role: {
       type: String,
