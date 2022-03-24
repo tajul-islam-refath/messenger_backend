@@ -5,7 +5,7 @@ const asyncHandler = require("express-async-handler");
 exports.accessChat = asyncHandler(async (req, res) => {
   const { userId } = req.body;
 
-  console.log(userId);
+  // console.log(userId);
 
   if (!userId) {
     console.log("User not found");
@@ -57,11 +57,12 @@ exports.accessChat = asyncHandler(async (req, res) => {
 });
 
 exports.getAllChats = asyncHandler(async function (req, res) {
+  // console.log(req.user);
   try {
     let chats = await Chat.find({
       users: { $elemMatch: { $eq: req.user._id } },
     })
-      .populate("user", "-password")
+      .populate("users", "-password")
       .populate("groupAdmin", "-password")
       .populate("latestMessage")
       .sort({ updatedAt: -1 });
