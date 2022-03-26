@@ -14,8 +14,8 @@ router.post("/accessChat", authMiddleware, accessChat);
 router.get("/allChats", authMiddleware, getAllChats);
 
 router.post("/createGroup", authMiddleware, createGroupChat);
-router.put("renameGroup", authMiddleware, renameChat);
+router.put("/renameGroup", authMiddleware, renameChat);
 router.put("/addInGroup", authMiddleware, addInGroup);
-router.delete("/removeGroup", authMiddleware, removeFromGroupChat);
+router.put("/removeFromGroup", authMiddleware, removeFromGroupChat);
 
 module.exports = router;

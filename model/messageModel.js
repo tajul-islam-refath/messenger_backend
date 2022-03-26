@@ -11,20 +11,20 @@ const messageSchema = new Schema(
       },
     ],
     sender: {
-      id: Schema.Types.ObjectId,
-      name: String,
-      avatar: String,
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
     },
-    receiver: {
-      id: Schema.Types.ObjectId,
-      name: String,
-      avatar: String,
-    },
+    // receiver: {
+    //   type: Schema.Types.ObjectId,
+    //   required: true,
+    //   ref: "User",
+    // },
     date_time: {
       type: Date,
-      default: Date.now,
+      default: Date.now(),
     },
-    chat_id: {
+    chatId: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "Chat",
@@ -35,6 +35,6 @@ const messageSchema = new Schema(
   }
 );
 
-const Message = mongoose.model("Message", messageSchema);
+const Message = model("Message", messageSchema);
 
 module.exports = Message;

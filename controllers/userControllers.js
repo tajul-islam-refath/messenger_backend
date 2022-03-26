@@ -59,6 +59,9 @@ exports.loginUser = asyncHandler(async (req, res) => {
 });
 
 exports.allUsers = asyncHandler(async (req, res) => {
+  if (!req.query.search) {
+    return res.status(400);
+  }
   const keyword = req.query.search
     ? {
         $or: [

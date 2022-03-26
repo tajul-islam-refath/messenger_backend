@@ -90,9 +90,9 @@ exports.createGroupChat = asyncHandler(async function (req, res) {
   }
 
   var users = JSON.parse(req.body.users);
-  if (users.length < 2) {
+  if (users.length <= 1) {
     return res.status(400).json({
-      message: "More than 2 users required for group chat",
+      message: "More than 1 users required for group chat",
     });
   }
 
@@ -105,6 +105,8 @@ exports.createGroupChat = asyncHandler(async function (req, res) {
       users,
       groupAdmin: req.user._id,
     });
+
+    await newGroupChat.save();
 
     const findChat = await Chat.findOne({ _id: newGroupChat._id })
       .populate("users", "-password")
