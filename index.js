@@ -21,7 +21,7 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
 
 app.get("/", function (req, res) {
-  res.status(301).redirect("https://www.google.com");
+  res.status(301).redirect("https://dashing-donut-295ac1.netlify.app");
   // res.send({ name: "Refath", age: 14, status: "single" });
 });
 
