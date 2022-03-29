@@ -21,8 +21,8 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
 
 app.get("/", function (req, res) {
-  // res.status(301).redirect("https://www.google.com");
-  res.send.json({ name: "Refath", age: 14, status: "single" });
+  res.status(301).redirect("https://www.google.com");
+  // res.send({ name: "Refath", age: 14, status: "single" });
 });
 
 app.use("*", function (req, res) {

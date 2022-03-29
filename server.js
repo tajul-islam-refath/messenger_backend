@@ -3,7 +3,7 @@ const app = require("./index");
 const dotenv = require("dotenv");
 
 /// setting up confige file
-if (process.env.NODE_ENV.toUpperCase() != "PRODUCTION") {
+if (process.env.NODE_ENV != "PRODUCTION") {
   dotenv.config({ path: "./.env" });
 }
 
