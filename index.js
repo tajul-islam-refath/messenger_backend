@@ -20,6 +20,14 @@ app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
 
+app.get("/", function (req, res) {
+  res.status(301).redirect("https://www.google.com");
+});
+
+app.use("*", function (req, res) {
+  res.status(404).send("Not Found");
+});
+
 app.use(notFound);
-// app.use(errorHandler);
+app.use(errorHandler);
 module.exports = app;
