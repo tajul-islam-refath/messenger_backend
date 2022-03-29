@@ -43,9 +43,35 @@ io.on("connection", (socket) => {
   // received user from client
   socket.on("setup", (userData) => {
     // console.log(userData);
-    // join user in room
+    // create user room
     socket.join(userData._id);
     // send response back to client
     socket.emit("response");
   });
+
+  socket.on("join chat", (room) => {
+    socket.join(room);
+    console.log("User joind room  " + room);
+    // console.log(socket.rooms);
+  });
+
+  // new message chat
+  socket.on("new message", (message) => {
+    let chat = message.chatId;
+    if (!chat.users) {
+      return console.log("Chat.users not defined");
+    }
+
+    chat.users.forEach((user) => {
+      if (user._id == message.sender._id) return;
+
+      // join user in room with user_id
+      socket.in(user._id).emit("message recieved", message);
+      console.log(socket.rooms);
+    });
+  });
+
+  // for typing effect
+  socket.on("typing", (room) => socket.in(room).emit("typing"));
+  socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
 });
