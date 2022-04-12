@@ -69,7 +69,7 @@ io.on("connection", (socket) => {
 
       // join user in room with user_id
       socket.in(user._id).emit("message recieved", message);
-      console.log(socket.rooms);
+      // console.log(socket.rooms);
     });
   });
 
